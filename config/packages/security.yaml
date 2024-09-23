@@ -41,9 +41,9 @@ security:
     # Note: Only the *first* access control that matches will be used
 
     access_control:
-        #- { path: ^/conseil, roles: ROLE_USER }
+        - { path: ^/api/conseil, roles: ROLE_ADMIN }
         #- { path: ^/metheo, roles: ROLE_USER }
-        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+        #- { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
 
 
 when@test:

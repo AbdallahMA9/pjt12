@@ -17,7 +17,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\HttpFoundation\Response;
 
-
+#[Route('/api')]
 class MeteoController extends AbstractController
 {
     private $httpClient;
@@ -66,11 +66,36 @@ class MeteoController extends AbstractController
     }
 
 
-    #[Route('/meteo/{ville}', name: 'app_meteo', methods: ['GET'])]
+    #[Route('/meteo/{ville}', name: 'app_meteo_city', methods: ['GET'])]
     public function getMeteo(string $ville): JsonResponse
     {
         $apiKey = '4e1d9baeff944087956162719242309';
 
+        // Utiliser le cache pour éviter les requêtes répétées
+        $meteo = $this->cache->get('meteo_'.$ville, function () use ($ville, $apiKey) {
+            $url = 'http://api.weatherapi.com/v1/current.json?key=' . $apiKey . '&q=' . $ville . '&aqi=no';
+            $response = $this->httpClient->request('GET', $url);
+
+            if ($response->getStatusCode() !== 200) {
+                return null; // Gérer les erreurs ici
+            }
+
+            return $response->toArray(); // Convertir la réponse JSON en tableau PHP
+        });
+
+        if ($meteo === null) {
+            return new JsonResponse(['error' => 'Unable to retrieve weather data'], Response::HTTP_BAD_REQUEST);
+        }
+
+        return new JsonResponse($meteo);
+    }
+
+    #[Route('/meteo', name: 'app_meteo', methods: ['GET'])]
+    public function getMeteoByCity(): JsonResponse
+    {
+        $apiKey = '4e1d9baeff944087956162719242309';
+        $ville = $this->getUser()->getCity();
+        
         // Utiliser le cache pour éviter les requêtes répétées
         $meteo = $this->cache->get('meteo_'.$ville, function () use ($ville, $apiKey) {
             $url = 'http://api.weatherapi.com/v1/current.json?key=' . $apiKey . '&q=' . $ville . '&aqi=no';

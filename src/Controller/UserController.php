@@ -44,7 +44,7 @@ class UserController extends AbstractController
             $em->persist($user);
             $em->flush();
 
-            return new JsonResponse(['status' => 'Utilisateur créé avec succès'], 201);
+            return new JsonResponse(['status' => 'Utilisateur créé avec succès'], Response::HTTP_CREATED);
         }
 
         // Retourner les erreurs de validation
@@ -56,11 +56,11 @@ class UserController extends AbstractController
         return new JsonResponse([
             'error' => 'Données invalides',
             'details' => $errors
-        ], 400);
+        ], Response::HTTP_BAD_REQUEST);
     }
 
     #[Route('/user/{id}', name: 'update_user', methods: ['PUT'])]
-    #[IsGranted("ROLE_ADMIN")]
+    //#[IsGranted("ROLE_ADMIN")]
     public function updateUser($id ,Request $request,UserRepository $userRepository,EntityManagerInterface $entityManager,UserPasswordHasherInterface $userPasswordHasher): JsonResponse {
         // Récupérer l'utilisateur à mettre à jour
         $user = $userRepository->find($id);
@@ -90,7 +90,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/{id}', name: 'delete_user', methods: ['DELETE'])]
-    #[IsGranted("ROLE_ADMIN")]
+    //#[IsGranted("ROLE_ADMIN")]
     public function deleteUser(int $id, UserRepository $userRepository, EntityManagerInterface $entityManager): JsonResponse
     {
         // Récupérer l'utilisateur à supprimer
