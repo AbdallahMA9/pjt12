@@ -30,26 +30,14 @@ class UserType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('plainPassword', PasswordType::class, [
-                'mapped' => false,  // Champ non mappé sur l'entité User
-                'attr' => ['autocomplete' => 'new-password'],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Le mot de passe est obligatoire.',
-                    ]),
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'Le mot de passe doit contenir au moins {{ limit }} caractères.',
-                        'max' => 4096, // Longueur maximale pour des raisons de sécurité
-                    ]),
-                ],
-            ]);
+            ->add('password', TextType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+      //      'csrf_protection' => false,
         ]);
     }
 }

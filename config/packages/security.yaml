@@ -23,10 +23,10 @@ security:
             # https://symfony.com/doc/current/security/impersonating_user.html
             # switch_user: true
         login:
-            pattern: ^/api/login
+            pattern: ^/auth
             stateless: true
             json_login:
-                check_path: /api/login_check
+                check_path: /auth
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
         api:
@@ -41,7 +41,8 @@ security:
     # Note: Only the *first* access control that matches will be used
 
     access_control:
-        - { path: ^/api/login, roles: PUBLIC_ACCESS }
+        #- { path: ^/conseil, roles: ROLE_USER }
+        #- { path: ^/metheo, roles: ROLE_USER }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
 
 
