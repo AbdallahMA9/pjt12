@@ -16,10 +16,10 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('zipcode', TextType::class, [
+            ->add('city', TextType::class, [
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Le code postal est obligatoire.',
+                        'message' => 'La Ville obligatoire.',
                     ]),
                 ],
             ])
@@ -37,7 +37,7 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
-      //      'csrf_protection' => false,
+            'csrf_protection' => false
         ]);
     }
 }

@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+#[Route('/api')]
 class UserController extends AbstractController
 {
     #[Route('/user', name: 'app_user', methods: ['POST'])]
@@ -60,7 +61,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/{id}', name: 'update_user', methods: ['PUT'])]
-    //#[IsGranted("ROLE_ADMIN")]
+    #[IsGranted("ROLE_ADMIN")]
     public function updateUser($id ,Request $request,UserRepository $userRepository,EntityManagerInterface $entityManager,UserPasswordHasherInterface $userPasswordHasher): JsonResponse {
         // Récupérer l'utilisateur à mettre à jour
         $user = $userRepository->find($id);
@@ -90,7 +91,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/{id}', name: 'delete_user', methods: ['DELETE'])]
-    //#[IsGranted("ROLE_ADMIN")]
+    #[IsGranted("ROLE_ADMIN")]
     public function deleteUser(int $id, UserRepository $userRepository, EntityManagerInterface $entityManager): JsonResponse
     {
         // Récupérer l'utilisateur à supprimer
